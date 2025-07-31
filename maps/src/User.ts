@@ -1,1 +1,10 @@
-class User {}
+import { fakerIT } from '@faker-js/faker';
+
+class User {
+  name: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  constructor() {}
+}
