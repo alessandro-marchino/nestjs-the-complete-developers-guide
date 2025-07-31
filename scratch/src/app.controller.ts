@@ -6,4 +6,9 @@ export class AppController {
   getRootRoute() {
     return 'Hi there'
   }
+
+  @Get('/bye')
+  getByeThere() {
+    return 'Bye there'
+  }
 }
