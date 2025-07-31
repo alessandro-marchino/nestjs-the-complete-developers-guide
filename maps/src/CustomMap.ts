@@ -1,7 +1,11 @@
 /// <reference types="@types/google.maps" />
 
-import { type Company } from './Company';
-import { type User } from './User';
+interface Mappable {
+  location: {
+    lat: number;
+    lng: number;
+  }
+}
 
 export class CustomMap {
   private map: google.maps.Map;
@@ -16,24 +20,14 @@ export class CustomMap {
     });
   }
 
-  addUserMarker(user: User): void {
+  addMarker(mappable: Mappable): void {
     new google.maps.Marker({
       map: this.map,
       position: {
-        lat: user.location.lat,
-        lng: user.location.lng
-      },
-      title: `User: ${user.name}`
+        lat: mappable.location.lat,
+        lng: mappable.location.lng
+      }
     });
   }
-  addCompanyMarker(company: Company): void {
-    new google.maps.Marker({
-      map: this.map,
-      position: {
-        lat: company.location.lat,
-        lng: company.location.lng
-      },
-      title: `Company: ${company.companyName}\n${company.catchPhrase}`
-    });
-  }
+
 }
