@@ -8,10 +8,10 @@ interface Mappable {
 }
 
 export class CustomMap {
-  private map: google.maps.Map;
+  private googleMap: google.maps.Map;
 
   constructor(divId: string) {
-    this.map = new google.maps.Map(document.getElementById(divId)!, {
+    this.googleMap = new google.maps.Map(document.getElementById(divId)!, {
       zoom: 1,
       center: {
         lat: 0,
@@ -21,12 +21,18 @@ export class CustomMap {
   }
 
   addMarker(mappable: Mappable): void {
-    new google.maps.Marker({
-      map: this.map,
+    const marker = new google.maps.Marker({
+      map: this.googleMap,
       position: {
         lat: mappable.location.lat,
         lng: mappable.location.lng
       }
+    });
+    marker.addListener('click', () => {
+      const infoWindow = new google.maps.InfoWindow({
+        content: 'Hi there!'
+      });
+      infoWindow.open(this.googleMap, marker);
     });
   }
 
