@@ -6,5 +6,11 @@ class User {
     lat: number;
     lng: number;
   };
-  constructor() {}
+  constructor() {
+    this.name = fakerIT.person.firstName();
+    this.location = {
+      lat: fakerIT.location.latitude(),
+      lng: fakerIT.location.longitude()
+    };
+  }
 }
