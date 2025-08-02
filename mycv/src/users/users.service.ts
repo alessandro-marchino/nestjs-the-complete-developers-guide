@@ -2,15 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(email: string, password: string) {
-    const hashedPassword = await hash(password, 10);
-    const user = this.repo.create({ email, password: hashedPassword });
+    const user = this.repo.create({ email, password });
     return this.repo.save(user);
   }
 
@@ -24,9 +22,6 @@ export class UsersService {
     const user = await this.findOne(id);
     if(!user) {
       throw new NotFoundException('user not found');
-    }
-    if(attr.password) {
-      attr.password = await hash(attr.password, 10)
     }
     Object.assign(user, attr);
     return this.repo.save(user);

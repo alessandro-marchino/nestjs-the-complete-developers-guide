@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,9 +14,23 @@ export class AuthService {
     }
     // Hash user password
     const hashedPassword = await hash(password, 10);
+
     // Create a new user and save it
+    const user = await this.userService.create(email, hashedPassword);
+
     // Return the user
+    return user;
   }
 
-  signin() {}
+  async signin(email: string, password: string) {
+    const [ user ] = await this.userService.find(email);
+    if(!user) {
+      throw new UnauthorizedException();
+    }
+    const passwordMatches = await compare(password, user.password);
+    if(!passwordMatches) {
+      throw new UnauthorizedException();
+    }
+    return user;
+  }
 }
