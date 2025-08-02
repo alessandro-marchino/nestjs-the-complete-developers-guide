@@ -20,6 +20,6 @@ export class User {
 
   @AfterUpdate()
   private logUpdate() {
-    console.log(`Updated user with id ${this.id}`);
+    console.log(`Updated user with email ${this.email}`);
   }
 }

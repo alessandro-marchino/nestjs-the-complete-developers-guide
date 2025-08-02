@@ -25,6 +25,9 @@ export class UsersService {
     if(!user) {
       throw new Error('user not found');
     }
+    if(attr.password) {
+      attr.password = await hash(attr.password, 10)
+    }
     Object.assign(user, attr);
     return this.repo.save(user);
   }
