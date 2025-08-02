@@ -10,16 +10,16 @@ export class User {
   password: string;
 
   @AfterInsert()
-  logInsert() {
+  private logInsert() {
     console.log(`Inserted user with id ${this.id}`);
   }
   @AfterRemove()
-  logRemove() {
+  private logRemove() {
     console.log(`Removed user with id ${this.id}`);
   }
 
   @AfterUpdate()
-  logUpdate() {
+  private logUpdate() {
     console.log(`Updated user with id ${this.id}`);
   }
 }
