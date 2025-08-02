@@ -13,9 +13,19 @@ export class UsersController {
     private usersService: UsersService,
     private authService: AuthService) {}
 
+  @Post('/signout')
+  @HttpCode(204)
+  signout(@Session() session: any) {
+    session.userId = null;
+  }
+
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  async whoAmI(@Session() session: any) {
+    const user = await this.usersService.findOne(session.userId);
+    if(!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   @Post('/signup')
