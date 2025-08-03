@@ -3,16 +3,22 @@ import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { randomInt, randomUUID } from 'crypto';
 
 describe('AuthService', () => {
   let service: AuthService;
   let fakeUsersService: Partial<UsersService>;
 
   beforeEach(async () => {
+    const users: User[] = [];
     // Create a fake copy of the users service
     fakeUsersService = {
-      find: () => Promise.resolve([]),
-      create: (email: string, password: string) => Promise.resolve({ id: 1, email, password } as User)
+      find: (email: string) => Promise.resolve( users.filter(user => user.email === email) ),
+      create: (email: string, password: string) => {
+        const user = { id: randomInt(999999), email, password } as User;
+        users.push(user);
+        return Promise.resolve(user);
+      }
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -72,7 +78,7 @@ describe('AuthService', () => {
   });
 
   it('returns a user if correct password is provided', async () => {
-    fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '$2b$10$2XQT/byyoLA.EQHtk4xii.1.OhonIqArzI9RyO9jcwvQsNoae4LX2'} as User ]);
+    await service.signup('test@test.com', 'asdf');
     const user = await service.signin('test@test.com', 'asdf');
     expect(user).toBeDefined();
   });
