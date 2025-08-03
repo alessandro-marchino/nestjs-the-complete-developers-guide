@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -28,16 +28,16 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  // it('creates a new user with a salted and hashed password', async () => {
-  //   const user = await service.signup('asdf@asdf.com', 'asdf');
-  //   expect(user.password).not.toEqual('asdf');
-  //   const [ _, algo, rounds, data ] = user.password.split('$');
-  //   expect(algo).toEqual('2b');
-  //   expect(rounds).toEqual('10');
-  //   const [ salt, hash ] = data.split(/\./);
-  //   expect(salt).toBeDefined();
-  //   expect(hash).toBeDefined();
-  // });
+  it('creates a new user with a salted and hashed password', async () => {
+    const user = await service.signup('asdf@asdf.com', 'asdf');
+    expect(user.password).not.toEqual('asdf');
+    const [ _, algo, rounds, data ] = user.password.split('$');
+    expect(algo).toEqual('2b');
+    expect(rounds).toEqual('10');
+    const [ salt, hash ] = data.split(/\./);
+    expect(salt).toBeDefined();
+    expect(hash).toBeDefined();
+  });
 
   it('throws an error if user signs up with email that is in use', async () => {
     fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '1'} as User ]);
@@ -50,4 +50,13 @@ describe('AuthService', () => {
     throw new Error('Should not have reached here');
   });
 
+  it('throws if signin is called with an unused email', async () => {
+    try {
+      await service.signin('asdf@asdf.com', 'asdf');
+    } catch(e) {
+      expect(e).toBeInstanceOf(UnauthorizedException);
+      return;
+    }
+    throw new Error('Should not have reached here');
+  });
 });
