@@ -15,7 +15,7 @@ import cookieSession from 'cookie-session';
     ReportsModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'db.sqlite',
+      database: process.env.NODE_ENV === 'test' ? ':memory:' : 'db.sqlite',
       entities: [ User, Report ],
       synchronize: true,
     }),
