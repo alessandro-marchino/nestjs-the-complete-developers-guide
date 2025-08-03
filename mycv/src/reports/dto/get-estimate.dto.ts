@@ -12,20 +12,20 @@ export class GetEstimateDto {
   @Min(1930)
   @Max(2050)
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => { const res = parseInt(value); return isNaN(res) ? null : res })
   year: number;
   @IsNumber()
   @Min(0)
   @Max(1000000)
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => { const res = parseInt(value); return isNaN(res) ? null : res })
   mileage: number;
   @IsLongitude()
   @IsOptional()
-  @Transform(({ value }) => parseFloat(value))
+  @Transform(({ value }) => { const res = parseFloat(value); return isNaN(res) ? null : res })
   lng: number;
   @IsLatitude()
   @IsOptional()
-  @Transform(({ value }) => parseFloat(value))
+  @Transform(({ value }) => { const res = parseFloat(value); return isNaN(res) ? null : res })
   lat: number;
 }

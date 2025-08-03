@@ -29,8 +29,7 @@ export class ReportsController {
   }
 
   @Get()
-  // @Serialize(ReportDto)
   getEstimate(@Query() query: GetEstimateDto) {
-    return query;
+    return this.reportsService.createEstimate(query);
   }
 }
