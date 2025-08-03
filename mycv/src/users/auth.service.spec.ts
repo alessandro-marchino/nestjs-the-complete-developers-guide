@@ -59,4 +59,21 @@ describe('AuthService', () => {
     }
     throw new Error('Should not have reached here');
   });
+
+  it('throws if an invalida password is provided', async () => {
+    fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '1'} as User ]);
+    try {
+      await service.signin('test@test.com', 'password');
+    } catch(e) {
+      expect(e).toBeInstanceOf(UnauthorizedException);
+      return;
+    }
+    throw new Error('Should not have reached here');
+  });
+
+  it('returns a user if correct password is provided', async () => {
+    fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '$2b$10$2XQT/byyoLA.EQHtk4xii.1.OhonIqArzI9RyO9jcwvQsNoae4LX2'} as User ]);
+    const user = await service.signin('test@test.com', 'asdf');
+    expect(user).toBeDefined();
+  });
 });
