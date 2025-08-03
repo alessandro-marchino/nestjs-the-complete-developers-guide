@@ -12,14 +12,14 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     fakeUsersService = {
-      findOne: async (id: number) => ({ id, email: 'asdf@asdf.com', password: 'asdf'} as User),
+      findOne: async (id: number) => ( { id, email: 'asdf@asdf.com', password: 'asdf'} as User),
       find: async (email: string) => [ { id: 1, email, password: 'asdf'} as User ],
       // remove: () => {},
       // update: () => {}
     };
     fakeAuthService = {
       // signup: (email: string, password: string) => {},
-      // signin: (email: string, password: string) => {}
+      signin: async (email: string, password: string) => ( { id: 1, email, password } as User)
     };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
@@ -56,5 +56,12 @@ describe('UsersController', () => {
       return
     }
     throw new Error('Should not reach here')
+  });
+
+  it('signin updates session object and returns user', async() => {
+    const session = { userId: -10 };
+    const user = await controller.signin({ email: 'asdf@asdf.com', password: 'asdf' }, session);
+    expect(user).toBeDefined();
+    expect(session.userId).toEqual(1);
   });
 });
