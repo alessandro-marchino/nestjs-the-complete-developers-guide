@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { randomInt, randomUUID } from 'crypto';
+import { randomInt } from 'crypto';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -46,7 +46,7 @@ describe('AuthService', () => {
   });
 
   it('throws an error if user signs up with email that is in use', async () => {
-    fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '1'} as User ]);
+    await service.signup('asdf@asdf.com', 'asdf');
     try {
       await service.signup('asdf@asdf.com', 'asdf');
     } catch(e) {
@@ -67,7 +67,7 @@ describe('AuthService', () => {
   });
 
   it('throws if an invalida password is provided', async () => {
-    fakeUsersService.find = () => Promise.resolve([ { id: 1, email: 'a', password: '1'} as User ]);
+    await service.signup('test@test.com', 'password1');
     try {
       await service.signin('test@test.com', 'password');
     } catch(e) {
