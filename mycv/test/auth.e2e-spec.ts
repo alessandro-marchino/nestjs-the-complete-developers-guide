@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request, { Response } from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
+import { setupApp } from '../src/setup-app';
 
 describe('Authentication Syste, (e2e)', () => {
   let app: INestApplication<App>;
@@ -17,7 +18,7 @@ describe('Authentication Syste, (e2e)', () => {
   });
 
   it('handles a signup request', () => {
-    const signupEmail = 'asdf@asdf.com';
+    const signupEmail = 'asdf1@asdf.com';
     return request(app.getHttpServer())
       .post('/auth/signup')
       .send({ email: signupEmail, password: 'asdf' })
