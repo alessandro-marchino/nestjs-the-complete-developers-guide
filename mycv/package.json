@@ -78,6 +78,9 @@
       "jest": true,
       "circus": true
     },
+    "moduleNameMapper": {
+      "src/(.*)$": "<rootDir>/$1"
+    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
