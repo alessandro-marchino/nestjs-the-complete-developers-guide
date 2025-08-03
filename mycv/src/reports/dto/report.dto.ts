@@ -19,8 +19,10 @@ export class ReportDto {
   lat: number;
   @Expose()
   price: number;
+  @Expose()
+  approved: boolean;
 
-  @Transform(({ obj }: { obj: Report }) => obj.user.id)
+  @Transform(({ obj }: { obj: Report }) => obj?.user?.id)
   @Expose()
   userId: User;
 }
