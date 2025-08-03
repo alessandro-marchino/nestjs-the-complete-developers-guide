@@ -27,7 +27,8 @@ export class ReportsService {
   }
 
   createEstimate({ make, model, year, mileage, lng, lat}: GetEstimateDto) {
-    const qb = this.repo.createQueryBuilder().where('1 = 1');
+    const qb = this.repo.createQueryBuilder()
+      .where('approved = true');
     if(make != undefined) {
       qb.andWhere('make = :make', { make });
     }
