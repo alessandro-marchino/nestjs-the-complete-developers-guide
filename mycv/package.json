@@ -74,6 +74,10 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "env": {
+      "jest": true,
+      "circus": true
+    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
