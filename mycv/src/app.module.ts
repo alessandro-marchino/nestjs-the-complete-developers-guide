@@ -4,11 +4,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
-import { Report } from './reports/report.entity';
 import { APP_PIPE } from '@nestjs/core';
 import cookieSession from 'cookie-session';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppDataSource } from './ormconfig';
 
 @Module({
   imports: [
@@ -18,15 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     UsersModule,
     ReportsModule,
-    TypeOrmModule.forRootAsync({
-      inject: [ ConfigService ],
-      useFactory: (config: ConfigService) => ({
-        type: 'better-sqlite3',
-        database: config.get<string>('DBNAME'),
-        entities: [ User, Report ],
-        synchronize: true
-      })
-    })
+    TypeOrmModule.forRoot(AppDataSource.options)
   ],
   controllers: [AppController],
   providers: [
