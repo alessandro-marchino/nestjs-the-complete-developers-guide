@@ -1,36 +1,31 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
 
-let dbConfig: DataSourceOptions;{
-
+let dbConfig: any = {
+  synchronize: false,
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  migrations: [ __dirname + '/migrations/*.ts' ],
+  cli: {
+    migrationsDir: 'migrations'
+  }
 };
 
 switch(process.env.NODE_ENV) {
   case 'development':
-    dbConfig = {
-      synchronize: false,
-      type: 'better-sqlite3',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      database: 'db.sqlite'
-    }
+    dbConfig.type = 'better-sqlite3';
+    dbConfig.database = 'db.sqlite';
     break;
   case 'test':
-    dbConfig = {
-      synchronize: true,
-      type: 'better-sqlite3',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      database: ':memory:'
-    }
+    dbConfig.synchronize = true;
+    dbConfig.type = 'better-sqlite3';
+    dbConfig.database = ':memory:';
     break;
   case 'production':
-    dbConfig = {
-      synchronize: false,
-      type: 'postgres',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      database: ''
-    }
+    dbConfig.type = 'postgres';
+    dbConfig.database = '';
     break;
   default:
     throw new Error('Unknown environment');
 }
 
 export const AppDataSource = new DataSource(dbConfig)
+export default dbConfig;
