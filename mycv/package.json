@@ -76,10 +76,6 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "env": {
-      "jest": true,
-      "circus": true
-    },
     "moduleNameMapper": {
       "src/(.*)$": "<rootDir>/$1"
     },
